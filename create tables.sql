@@ -49,7 +49,8 @@ CREATE TABLE Item (
     qtd			INT,
     preco		DECIMAL(10,2),
     
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
+    FOREIGN KEY (id_produto) REFERENCES Produto(id)
 );
 
 CREATE TABLE Estoque (
@@ -64,11 +65,19 @@ CREATE TABLE Estoque (
 CREATE TABLE Venda (
 	id	 		INT NOT NULL AUTO_INCREMENT,
     id_item 	INT NOT NULL,
+    id_pgto		INT NOT NULL,
+    id_entrega	INT NOT NULL,
+    id_func		INT NOT NULL,
+    id_cliente	INT NOT NULL,
     data_venda	DATE NOT NULL,
     valor_total	DECIMAL(10,2) NOT NULL,
     
     PRIMARY KEY (id),
-    FOREIGN KEY (id_item) REFERENCES Item(id)
+    FOREIGN KEY (id_item) REFERENCES Item(id),
+    FOREIGN KEY (id_pgto) REFERENCES MeioPgto(id),
+    FOREIGN KEY (id_entrega) REFERENCES Entrega(id),
+    FOREIGN KEY (id_func) REFERENCES Funcionario(id)
+    FOREIGN KEY (id_cliente) REFERENCES Cliente(id)
 );
 
 CREATE TABLE MateriaPrima (
@@ -83,12 +92,10 @@ CREATE TABLE MateriaPrima (
 CREATE TABLE Fornecedor (
 	id 					INT NOT NULL AUTO_INCREMENT,
     id_materia_prima	INT NOT NULL,
-    id_produto			INT NOT NULL,
     nome				VARCHAR(32),
     
     PRIMARY KEY (id),
-    FOREIGN KEY(id_materia_prima) REFERENCES MateriaPrima(id),
-    FOREIGN KEY(id_produto) REFERENCES Produto(id)
+    FOREIGN KEY(id_materia_prima) REFERENCES MateriaPrima(id)
 );
 
 CREATE TABLE Receita (
