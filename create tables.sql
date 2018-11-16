@@ -54,25 +54,6 @@ CREATE TABLE Item (
     FOREIGN KEY (id_produto) REFERENCES Produto(id)
 );
 
-CREATE TABLE EstoqueMateriaPrima (
-	id INT NOT NULL AUTO_INCREMENT,
-	id_materia_prima INT NOT NULL,
-    qtd_gramas INT,
-    
-    PRIMARY KEY(id),
-    FOREIGN KEY (id_materia_prima) REFERENCES MateriaPrima(id)
-);
-
-CREATE TABLE EstoqueProduto (
-	id INT NOT NULL AUTO_INCREMENT,
-	id_produto INT NOT NULL,
-    qtd INT,
-    
-    PRIMARY KEY(id),
-    FOREIGN KEY (id_produto) REFERENCES Produto(id)
-);
-
-
 CREATE TABLE MateriaPrima (
 	id INT NOT NULL AUTO_INCREMENT,
     nome VARCHAR(32),
@@ -192,6 +173,24 @@ CREATE TABLE PedidosProduto(
     qtd_pedido INT,
 
     PRIMARY KEY (id),
+    FOREIGN KEY (id_produto) REFERENCES Produto(id)
+);
+
+CREATE TABLE EstoqueMateriaPrima (
+	id INT NOT NULL AUTO_INCREMENT,
+	id_materia_prima INT NOT NULL,
+    qtd_gramas INT,
+    
+    PRIMARY KEY(id),
+    FOREIGN KEY (id_materia_prima) REFERENCES MateriaPrima(id)
+);
+
+CREATE TABLE EstoqueProduto (
+	id INT NOT NULL AUTO_INCREMENT,
+	id_produto INT NOT NULL,
+    qtd INT,
+    
+    PRIMARY KEY(id),
     FOREIGN KEY (id_produto) REFERENCES Produto(id)
 );
 
