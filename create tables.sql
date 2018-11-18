@@ -177,18 +177,20 @@ CREATE TABLE PedidosProduto(
 );
 
 CREATE TABLE EstoqueMateriaPrima (
-	id INT NOT NULL AUTO_INCREMENT,
-	id_materia_prima INT NOT NULL,
+    id INT NOT NULL AUTO_INCREMENT,
+    id_materia_prima INT NOT NULL,
     qtd_gramas INT,
+    estoque_min INT,
     
     PRIMARY KEY(id),
     FOREIGN KEY (id_materia_prima) REFERENCES MateriaPrima(id)
 );
 
 CREATE TABLE EstoqueProduto (
-	id INT NOT NULL AUTO_INCREMENT,
-	id_produto INT NOT NULL,
+    id INT NOT NULL AUTO_INCREMENT,
+    id_produto INT NOT NULL,
     qtd INT,
+    estoque_min INT,
     
     PRIMARY KEY(id),
     FOREIGN KEY (id_produto) REFERENCES Produto(id)
