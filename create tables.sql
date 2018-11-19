@@ -1,3 +1,5 @@
+-- CREATE SCHEMA Pastelaria;
+
 CREATE TABLE Cliente (
 	id INT NOT NULL AUTO_INCREMENT,
     nome VARCHAR(64) NOT NULL,
@@ -212,7 +214,7 @@ CREATE TABLE Venda (
     valor_total DECIMAL(10,2) NOT NULL,
     
     PRIMARY KEY (id),
-    FOREIGN KEY (id_item) REFERENCES Item(id),
+    FOREIGN KEY (id_carrinho) REFERENCES Carrinho(id),
     FOREIGN KEY (id_pgto) REFERENCES MeioPgto(id),
     FOREIGN KEY (id_entrega) REFERENCES Entrega(id),
     FOREIGN KEY (id_func) REFERENCES Funcionario(id),
