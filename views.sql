@@ -1,6 +1,6 @@
 -- view de vendas que foram realizadas no cartão (débito ou crédito)
 CREATE VIEW Vendas_Cartao AS
-    SELECT v.id, v.id_entrega, v.id_func, v.id_cliente, v.data_venda, v.valor_total
+    SELECT v.id, v.id_carrinho, v.id_pgto, v.id_entrega, v.id_func, v.id_cliente, v.data_venda, v.valor_total
     FROM Venda v
     WHERE v.id_pgto = 2 OR v.id_pgto = 3;
     
