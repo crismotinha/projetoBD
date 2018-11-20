@@ -1,12 +1,4 @@
--- procs venda
--- iniciaVenda(cliente)
---  cria uma nova entrada em Carrinho (cliente)
--- adicionaCarrinho(id carrinho, id produto, qtd)
---  cria um novo item(id produto, qtd) calculando o total
---  adiciona o item a itensCarrinho(id carrinho, id item)
--- fechaVenda(id carrinho)
---  soma todos os itens de itensCarrinho(id carrinho)
---  cria uma nova venda(id carrinho, preço total, cliente, etc)
+-- Procedures de venda:
 
 DELIMITER //
 CREATE PROCEDURE IniciaVenda (IN cliente_id INT, OUT carrinho_id INT)
@@ -28,19 +20,45 @@ BEGIN
 END //
 DELIMITER ;
 
-drop procedure AdicionaNoCarrinho;
+-- Criada pra melhorar a legibilidade do código, faz só o update da materia prima que é mais complexo
 
-CALL IniciaVenda(1, @Carrinho);
-SELECT @Carrinho;
-CALL AdicionaNoCarrinho(11,1, @Carrinho);
+DELIMITER //
+CREATE PROCEDURE UpdateEstoqueMateriaPrima (IN quantidade_produto INT, IN produto INT)
+BEGIN
+	
+    DECLARE done INT DEFAULT 0;
+    DECLARE cur_id_materia_prima INT;
+    DECLARE cur_qtd_materia_prima INT;
+    
+    DECLARE cursor_id_produtos cursor for select * from ReceitaNoCarrinho;
+    DECLARE continue handler for not found set done = 1;
+    
 
-select * from EstoqueProduto;
+	DROP TABLE IF EXISTS ReceitaNoCarrinho;
+	CREATE TEMPORARY TABLE ReceitaNoCarrinho
+	SELECT r.id_materia_prima, r.qtd * quantidade_produto 
+	FROM Produto p
+		INNER JOIN Receita r ON r.id_produto = p.id
+	WHERE p.id = produto;
+	
+    OPEN cursor_id_produtos;
+    REPEAT
+    
+        FETCH cursor_id_produtos into cur_id_materia_prima, cur_qtd_materia_prima;
+        
+        IF !done THEN
+			UPDATE EstoqueMateriaPrima emp
+			SET emp.qtd_gramas = qtd_gramas - cur_qtd_materia_prima
+            WHERE emp.id_materia_prima = cur_id_materia_prima;	
+		END IF;
+    UNTIL done END REPEAT;
 
-CALL FinalizaVenda(14, 1, null, 1, @ContaFinal);
-SELECT @ContaFinal
+    CLOSE cursor_id_produtos;
 
-drop procedure FinalizaVenda
+END //
+DELIMITER ;
 
+-- Finaliza a venda
 DELIMITER //
 CREATE PROCEDURE FinalizaVenda (IN carrinho_id INT, IN id_tipo_pagamento INT, IN id_entrega INT, IN id_funcionario_caixa INT, OUT valor_final DECIMAL(10,2))
 BEGIN
@@ -70,22 +88,38 @@ BEGIN
     INSERT INTO Venda (id_carrinho, id_pgto, id_entrega, id_func, id_cliente, data_venda, valor_total) VALUES
     (carrinho_id, id_tipo_pagamento, id_entrega, id_funcionario_caixa, cliente, curdate(), valor_final);
 
-    
 
     OPEN cursor_id_produtos;
     REPEAT
+    
         FETCH cursor_id_produtos into cur_id_produto, cur_qtd_produto, cur_tem_materia_prima;
         
-        CASE cur_tem_materia_prima WHEN false THEN
-            UPDATE EstoqueProduto ep
-            SET ep.qtd = ep.qtd - cur_qtd_produto
-            WHERE ep.id_produto = cur_id_produto;
-        END CASE;
+        IF !done THEN
         
-    UNTIL done
-    END REPEAT;
+			CASE cur_tem_materia_prima WHEN false THEN
+				UPDATE EstoqueProduto ep
+				SET ep.qtd = ep.qtd - cur_qtd_produto
+				WHERE ep.id_produto = cur_id_produto;
+			
+            WHEN true THEN
+				CALL UpdateEstoqueMateriaPrima(cur_id_produto, cur_qtd_produto);
+            
+            END CASE;
+        END IF;
+    UNTIL done END REPEAT;
 
     CLOSE cursor_id_produtos;
 
 END //
 DELIMITER ;
+
+-- Exemplo de Venda:
+
+CALL IniciaVenda(1, @Carrinho);
+
+SELECT @Carrinho;
+
+CALL AdicionaNoCarrinho(2,2, @Carrinho);
+
+CALL FinalizaVenda(15, 1, null, 1, @ContaFinal);
+SELECT @ContaFinal
