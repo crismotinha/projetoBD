@@ -60,9 +60,21 @@
     ORDER BY NUM_COMPRAS ASC LIMIT 1; 
 
 -- 10. Produtos mais pedidos (sem receita) (refrigerante, cerveja)
+    SELECT p.descricao AS NOME_PRODUTO, count(i.id) AS NUM_PEDIDOS
+    FROM Produto p
+        INNER JOIN Item i ON i.id_produto = p.id
+    WHERE p.tem_materia_prima = false
+    GROUP BY p.descricao
+    ORDER BY NUM_PEDIDOS DESC LIMIT 5; -- pega os top 5
     
 
 -- 11. Produtos mais pedidos (com receita) (por exemplo pastel de carne)
+    SELECT p.descricao AS NOME_PRODUTO, count(i.id) AS NUM_PEDIDOS
+    FROM Produto p
+        INNER JOIN Item i ON i.id_produto = p.id
+    WHERE p.tem_materia_prima = true
+    GROUP BY p.descricao
+    ORDER BY NUM_PEDIDOS DESC LIMIT 5; -- pega os top 5
 
 -- 12. Matéria prima que gasta mais por semana
 
