@@ -39,16 +39,28 @@
     FROM Vendas_Cartao vc
     WHERE vc.id_pgto = 3;
 
--- 7. Média de vendas por dinheiro
+-- 7. Média de vendas por dinheiro (em cima da view)
     SELECT avg(valor_total)
     FROM Vendas_Dinheiro;
 
 -- 8. Qual cliente comprou mais
-
+    SELECT c.nome AS NOME_CLIENTE, count(v.id) AS NUM_COMPRAS
+    FROM Venda v 
+        INNER JOIN Carrinho ca ON ca.id = v.id_carrinho
+        INNER JOIN Cliente c ON c.id = ca.id_cliente
+    GROUP BY c.nome
+    ORDER BY NUM_COMPRAS DESC LIMIT 1; 
 
 -- 9. Qual cliente comprou menos
+    SELECT c.nome AS NOME_CLIENTE, count(v.id) AS NUM_COMPRAS
+    FROM Venda v 
+        INNER JOIN Carrinho ca ON ca.id = v.id_carrinho
+        INNER JOIN Cliente c ON c.id = ca.id_cliente
+    GROUP BY c.nome
+    ORDER BY NUM_COMPRAS ASC LIMIT 1; 
 
 -- 10. Produtos mais pedidos (sem receita) (refrigerante, cerveja)
+    
 
 -- 11. Produtos mais pedidos (com receita) (por exemplo pastel de carne)
 
