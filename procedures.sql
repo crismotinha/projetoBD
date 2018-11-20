@@ -32,12 +32,11 @@ drop procedure AdicionaNoCarrinho;
 
 CALL IniciaVenda(1, @Carrinho);
 SELECT @Carrinho;
-CALL AdicionaNoCarrinho(11,1, @Carrinho)
+CALL AdicionaNoCarrinho(11,1, @Carrinho);
 
-select * from EstoqueProduto
-select * from 
+select * from EstoqueProduto;
 
-CALL FinalizaVenda(13, 1, null, 1, @ContaFinal);
+CALL FinalizaVenda(14, 1, null, 1, @ContaFinal);
 SELECT @ContaFinal
 
 drop procedure FinalizaVenda
@@ -66,7 +65,7 @@ BEGIN
     WHERE ic.id_carrinho = carrinho_id
     GROUP BY i.id_produto;
     
-    SELECT sum('Soma') INTO valor_final FROM ItensNoCarrinho;
+    SELECT sum(Soma) INTO valor_final FROM ItensNoCarrinho;
     
     INSERT INTO Venda (id_carrinho, id_pgto, id_entrega, id_func, id_cliente, data_venda, valor_total) VALUES
     (carrinho_id, id_tipo_pagamento, id_entrega, id_funcionario_caixa, cliente, curdate(), valor_final);
