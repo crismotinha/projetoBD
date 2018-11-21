@@ -81,10 +81,24 @@
 -- 13. Numero de entregas por funcionario entregador
 
 -- 14. Produto mais vendido no dia
+SELECT p.descricao AS PRODUTO_MAIS_VENDIDO_HJ, count(i.id) AS NUM_PEDIDOS
+    FROM Produto p, Venda v
+        INNER JOIN Item i ON i.id_produto = p.id
+        INNER JOIN ItemCarrinho ic on ic.id_item = i.id
+        INNER JOIN Carrinho ca ON ca.id = ic.id_carrinho
+        INNER JOIN Venda v ON v.id_carrinho = ca.id
+    WHERE v.data_venda = curdate()
+    GROUP BY p.descricao
+    ORDER BY NUM_PEDIDOS DESC LIMIT 1;
 
 -- 15. Vendas mais caras do ultimo mes
 
 -- 16. Peso total de cada produto com materia prima (soma das qtd que são em gramas)
+    SELECT p.descricao AS NOME_PRODUTO, sum(ep.qtd) AS PESO_TOTAL 
+    FROM Produto p
+    	INNER JOIN EstoqueProduto ep ON p.id = ep.id_produto
+    WHERE p.tem_materia_prima = true
+    GROUP BY p.descricao
 
 -- 17. Numero de funcionarios por filial
     SELECT num_funcionarios, nome
