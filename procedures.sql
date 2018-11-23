@@ -7,7 +7,6 @@ BEGIN
     SELECT c.id INTO carrinho_id FROM Carrinho c WHERE c.id_cliente = cliente_id ORDER BY id desc limit 1;
 END //
 DELIMITER ;
-drop procedure IniciaVenda
 
 DELIMITER //
 CREATE PROCEDURE AdicionaNoCarrinho (IN id_produto INT, IN qtd_produto INT, IN id_carrinho INT)
@@ -121,5 +120,5 @@ SELECT @Carrinho;
 
 CALL AdicionaNoCarrinho(2,2, @Carrinho);
 
-CALL FinalizaVenda(15, 1, null, 1, @ContaFinal);
+CALL FinalizaVenda(@Carrinho, 1, null, 1, @ContaFinal);
 SELECT @ContaFinal
