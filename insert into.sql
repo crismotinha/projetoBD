@@ -16,18 +16,18 @@ INSERT INTO Funcionario (nome, filial, tipo) values
 ("Joana", 2, 1),
 ("Luiza", 2, 2);
 
-INSERT INTO Produto (descricao, tem_materia_prima) values
-("Pastel de carne", true),
-("Pastel de calabresa", true),
-("Pastel de banana com nutella", true),
-("Pastel de queijo", true),
-("Pastel de pizza", true),
-("Coca cola", false),
-("Fanta", false),
-("Cerveja Antartica", false),
-("Cerveja Brahma", false),
-("Mate com limão", false),
-("Mate sem limão", false);
+INSERT INTO Produto (descricao, preco, tem_materia_prima) values
+("Pastel de carne", 7.00, true),
+("Pastel de calabresa", 7.00, true),
+("Pastel de banana com nutella", 5.00, true),
+("Pastel de queijo", 5.00, true),
+("Pastel de pizza", 5.00, true),
+("Coca cola", 4.50, false),
+("Fanta", 4.50, false),
+("Cerveja Antartica", 5.50, false),
+("Cerveja Brahma", 5.50, false),
+("Mate com limão", 2.50, false),
+("Mate sem limão", 2.50, false);
 
 INSERT INTO MateriaPrima (nome, validade) values
 ("Massa de pastel", "1 mes"),
