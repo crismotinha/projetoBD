@@ -147,6 +147,7 @@ CREATE TABLE PedidosMateriaPrima(
     id_materia_prima INT NOT NULL,
     id_fornecedor INT NOT NULL,
     qtd_gramas_pedido INT NOT NULL,
+    data_ped DATE NOT NULL,
 
     PRIMARY KEY (id),
     FOREIGN KEY (id_materia_prima) REFERENCES MateriaPrima(id),
@@ -158,6 +159,7 @@ CREATE TABLE PedidosProduto(
     id_produto INT NOT NULL,
     id_fornecedor INT NOT NULL,
     qtd_pedido INT NOT NULL,
+    data_ped DATE NOT NULL,
 
     PRIMARY KEY (id),
     FOREIGN KEY (id_produto) REFERENCES Produto(id),
@@ -209,7 +211,6 @@ CREATE TABLE Venda (
     id_pgto INT NOT NULL,
     id_entrega INT,
     id_func INT NOT NULL,
-    id_cliente INT NOT NULL,
     data_venda DATE NOT NULL,
     valor_total DECIMAL(10,2) NOT NULL,
     
@@ -217,8 +218,7 @@ CREATE TABLE Venda (
     FOREIGN KEY (id_carrinho) REFERENCES Carrinho(id),
     FOREIGN KEY (id_pgto) REFERENCES MeioPgto(id),
     FOREIGN KEY (id_entrega) REFERENCES Entrega(id),
-    FOREIGN KEY (id_func) REFERENCES Funcionario(id),
-    FOREIGN KEY (id_cliente) REFERENCES Cliente(id)
+    FOREIGN KEY (id_func) REFERENCES Funcionario(id)
 );
 
     
