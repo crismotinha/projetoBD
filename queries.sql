@@ -87,7 +87,7 @@
  
 -- 14. Produto mais vendido no dia
     SELECT p.descricao AS PRODUTO_MAIS_VENDIDO_HJ, count(i.id) AS NUM_PEDIDOS
-    FROM Produto p, Venda v
+    FROM Produto p
         INNER JOIN Item i ON i.id_produto = p.id
         INNER JOIN ItemCarrinho ic on ic.id_item = i.id
         INNER JOIN Carrinho ca ON ca.id = ic.id_carrinho
