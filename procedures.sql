@@ -66,12 +66,8 @@ BEGIN
     DECLARE cur_tem_materia_prima BOOL;
     DECLARE cur_qtd_produto INT;
     
-    DECLARE cliente INT;
-    
     DECLARE cursor_id_produtos cursor for select id_produto, Qtd, tem_materia_prima from ItensNoCarrinho;
     DECLARE continue handler for not found set done = 1;
-    
-    SELECT c.id_cliente into cliente FROM Carrinho c WHERE c.id = carrinho_id;
     
     DROP TABLE IF EXISTS ItensNoCarrinho;
     CREATE TEMPORARY TABLE ItensNoCarrinho
@@ -84,8 +80,8 @@ BEGIN
     
     SELECT sum(Soma) INTO valor_final FROM ItensNoCarrinho;
     
-    INSERT INTO Venda (id_carrinho, id_pgto, id_entrega, id_func, id_cliente, data_venda, valor_total) VALUES
-    (carrinho_id, id_tipo_pagamento, id_entrega, id_funcionario_caixa, cliente, curdate(), valor_final);
+    INSERT INTO Venda (id_carrinho, id_pgto, id_entrega, id_func, data_venda, valor_total) VALUES
+    (carrinho_id, id_tipo_pagamento, id_entrega, id_funcionario_caixa, curdate(), valor_final);
 
 
     OPEN cursor_id_produtos;
