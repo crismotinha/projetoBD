@@ -79,10 +79,15 @@
 -- 12. Matéria prima que gasta mais por semana
 
 -- 13. Numero de entregas por funcionario entregador
-
+    SELECT func.nome AS NOME_FUNCIONARIO, count(e.id) AS NUM_ENTREGAS
+    FROM Funcionario func
+        INNER JOIN Entrega e ON e.id_func = func.id
+    WHERE func.tipo = 2
+    GROUP BY func.nome;
+ 
 -- 14. Produto mais vendido no dia
-SELECT p.descricao AS PRODUTO_MAIS_VENDIDO_HJ, count(i.id) AS NUM_PEDIDOS
-    FROM Produto p, Venda v
+    SELECT p.descricao AS PRODUTO_MAIS_VENDIDO_HJ, count(i.id) AS NUM_PEDIDOS
+    FROM Produto p
         INNER JOIN Item i ON i.id_produto = p.id
         INNER JOIN ItemCarrinho ic on ic.id_item = i.id
         INNER JOIN Carrinho ca ON ca.id = ic.id_carrinho
