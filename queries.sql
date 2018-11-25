@@ -105,16 +105,9 @@
     WHERE p.tem_materia_prima = true
     GROUP BY p.descricao
 
--- 17. Numero de funcionarios por filial
-    SELECT num_funcionarios, nome
-    FROM Filial;
-    -- OU 
-    SELECT f.id AS ID_FILIAL, count(func.id) AS NUM_FUNC_FILIAL
-    FROM Funcionario func, Filial f
-    WHERE f.id = func.filial
-    GROUP BY func.filial
+-- 17. Media de entregas por filial por mês
 
--- 18. Media de entregas por filial por mês
+-- 18.
 
 -- 19.
 
