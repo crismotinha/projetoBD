@@ -30,17 +30,17 @@
     ORDER BY count(v.id) ASC LIMIT 1 ; 
 
 -- 5. Média de vendas por crédito (em cima da view)
-    SELECT avg(valor_total)
+    SELECT avg(valor_total) AS MEDIA_CREDITO
     FROM Vendas_Cartao vc
     WHERE vc.id_pgto = 2;
 
 -- 6. Média de vendas por débito (em cima da view)
-    SELECT avg(valor_total)
+    SELECT avg(valor_total) AS MEDIA_DEBITO
     FROM Vendas_Cartao vc
     WHERE vc.id_pgto = 3;
 
 -- 7. Média de vendas por dinheiro (em cima da view)
-    SELECT avg(valor_total)
+    SELECT avg(valor_total) AS MEDIA_DINHEIRO
     FROM Vendas_Dinheiro;
 
 -- 8. Qual cliente comprou mais
