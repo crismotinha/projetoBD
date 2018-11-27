@@ -98,11 +98,11 @@
 
 -- 15. Vendas mais caras do ultimo mes
 
--- 16. Peso total de cada produto com materia prima (soma das qtd que são em gramas)
-    SELECT p.descricao AS NOME_PRODUTO, sum(ep.qtd) AS PESO_TOTAL 
+-- 16. Peso total de cada produto com receita (soma das qtd que são em gramas)
+    SELECT p.descricao AS NOME_PRODUTO, sum(r.qtd) AS PESO_TOTAL 
     FROM Produto p
-    	INNER JOIN EstoqueProduto ep ON p.id = ep.id_produto
-    WHERE p.tem_materia_prima = true
+		INNER JOIN Receita r ON r.id_produto = p.id
+	WHERE p.tem_materia_prima = true
     GROUP BY p.descricao
 
 -- 17. Media de entregas por filial por mês
