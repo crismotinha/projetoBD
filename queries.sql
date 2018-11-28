@@ -107,13 +107,32 @@
     FROM Produto p
 		INNER JOIN Receita r ON r.id_produto = p.id
 	WHERE p.tem_materia_prima = true
-    GROUP BY p.descricao
+    GROUP BY p.descricao;
 
 -- 17. Media de entregas por filial por mês
     
 
--- 18. 
+-- 18. Sabor de pastel mais vendido
+    SELECT p.descricao AS NOME_PRODUTO, count(i.id) AS NUM_PEDIDOS
+    FROM Produto p
+        INNER JOIN Item i ON i.id_produto = p.id
+    WHERE p.tem_materia_prima = true
+            AND p.descricao LIKE "Pastel%"
+    GROUP BY p.descricao
+    ORDER BY NUM_PEDIDOS DESC LIMIT 1;
 
--- 19.
+-- 19. Sabor de pastel mais vendido por loja
+    SELECT p.descricao AS NOME_PRODUTO, count(i.id) AS NUM_PEDIDOS, fi.nome AS NOME_FILIAL
+    FROM Produto p
+        INNER JOIN Item i ON i.id_produto = p.id
+        INNER JOIN ItemCarrinho ic ON i.id = ic.id_item
+        INNER JOIN Carrinho c ON c.id = ic.id_carrinho
+        INNER JOIN Venda v ON v.id_carrinho = c.id
+        INNER JOIN Funcionario f ON v.id_func = f.id
+        INNER JOIN Filial fi ON f.filial = fi.id
+    WHERE p.tem_materia_prima = true
+            AND p.descricao LIKE "Pastel%"
+    GROUP BY p.descricao, fi.nome
+    ORDER BY NUM_PEDIDOS DESC LIMIT 1;
 
 -- 20.
