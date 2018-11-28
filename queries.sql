@@ -97,6 +97,10 @@
     ORDER BY NUM_PEDIDOS DESC LIMIT 1;
 
 -- 15. Vendas mais caras do ultimo mes
+    SELECT id, id_carrinho, valor_total
+    FROM Venda v
+    WHERE data_venda > DATE_SUB(NOW(), INTERVAL 1 MONTH)
+    ORDER BY valor_total DESC LIMIT 5;
 
 -- 16. Peso total de cada produto com receita (soma das qtd que são em gramas)
     SELECT p.descricao AS NOME_PRODUTO, sum(r.qtd) AS PESO_TOTAL 
@@ -106,8 +110,9 @@
     GROUP BY p.descricao
 
 -- 17. Media de entregas por filial por mês
+    
 
--- 18.
+-- 18. 
 
 -- 19.
 
