@@ -97,18 +97,75 @@
     ORDER BY NUM_PEDIDOS DESC LIMIT 1;
 
 -- 15. Vendas mais caras do ultimo mes
+    SELECT id, id_carrinho, valor_total
+    FROM Venda v
+    WHERE data_venda > DATE_SUB(NOW(), INTERVAL 1 MONTH)
+    ORDER BY valor_total DESC LIMIT 5;
 
 -- 16. Peso total de cada produto com receita (soma das qtd que são em gramas)
     SELECT p.descricao AS NOME_PRODUTO, sum(r.qtd) AS PESO_TOTAL 
     FROM Produto p
 		INNER JOIN Receita r ON r.id_produto = p.id
 	WHERE p.tem_materia_prima = true
-    GROUP BY p.descricao
+    GROUP BY p.descricao;
 
 -- 17. Media de entregas por filial por mês
+    
 
--- 18.
+-- 18. Sabor de pastel mais vendido
+    SELECT p.descricao AS NOME_PRODUTO, count(i.id) AS NUM_PEDIDOS
+    FROM Produto p
+        INNER JOIN Item i ON i.id_produto = p.id
+    WHERE p.tem_materia_prima = true
+            AND p.descricao LIKE "Pastel%"
+    GROUP BY p.descricao
+    ORDER BY NUM_PEDIDOS DESC LIMIT 1;
 
--- 19.
+-- 19. Sabor de pastel mais vendido por loja
+    SELECT p.descricao AS NOME_PRODUTO, count(i.id) AS NUM_PEDIDOS, fi.nome AS NOME_FILIAL
+    FROM Produto p
+        INNER JOIN Item i ON i.id_produto = p.id
+        INNER JOIN ItemCarrinho ic ON i.id = ic.id_item
+        INNER JOIN Carrinho c ON c.id = ic.id_carrinho
+        INNER JOIN Venda v ON v.id_carrinho = c.id
+        INNER JOIN Funcionario f ON v.id_func = f.id
+        INNER JOIN Filial fi ON f.filial = fi.id
+    WHERE p.tem_materia_prima = true
+            AND p.descricao LIKE "Pastel%"
+    GROUP BY p.descricao, fi.nome
+    ORDER BY NUM_PEDIDOS DESC;
 
--- 20.
+-- 20. Fornecedor mais pedido de produto
+    SELECT fp.nome AS NOME_FORNECEDOR, p.descricao AS PRODUTO, count(pp.id) AS QTD_PEDIDOS
+    FROM PedidosProduto pp
+        INNER JOIN FornecedorProduto fp ON fp.id = pp.id_fornecedor
+        INNER JOIN Produto p ON pp.id_produto = p.id
+    GROUP BY fp.id, p.descricao
+    ORDER BY count(fp.id) DESC LIMIT 1;
+
+    
+-- 21. Fornecedor mais pedido de materia prima
+    SELECT fmp.nome AS NOME_FORNECEDOR, mp.nome AS PRODUTO, count(pmp.id) AS QTD_PEDIDOS
+    FROM PedidosMateriaPrima pmp
+        INNER JOIN FornecedorMateriaPrima fmp ON fmp.id = pmp.id_fornecedor
+        INNER JOIN MateriaPrima mp ON pmp.id_materia_prima = mp.id
+    GROUP BY fmp.id, mp.nome
+    ORDER BY count(fmp.id) DESC LIMIT 1;
+    
+-- 22. Fornecedor mais pedido de tudo 
+    
+    (SELECT fp.nome AS NOME_FORNECEDOR
+    FROM PedidosProduto pp
+        INNER JOIN FornecedorProduto fp ON fp.id = pp.id_fornecedor
+        INNER JOIN Produto p ON pp.id_produto = p.id
+    GROUP BY fp.id, p.descricao
+    ORDER BY count(fp.id) DESC LIMIT 1)
+    
+    UNION
+    
+    (SELECT fmp.nome AS NOME_FORNECEDOR
+    FROM PedidosMateriaPrima pmp
+        INNER JOIN FornecedorMateriaPrima fmp ON fmp.id = pmp.id_fornecedor
+        INNER JOIN MateriaPrima mp ON pmp.id_materia_prima = mp.id
+    GROUP BY fmp.id, mp.nome
+    ORDER BY count(fmp.id) DESC LIMIT 1);
