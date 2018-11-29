@@ -1,3 +1,6 @@
+-- Indice extra:
+CREATE INDEX p_descricao_idx ON Produto(descricao);
+
 -- Queries:
 
 -- 1. Vendas por filial
@@ -112,7 +115,6 @@
     FROM Produto p
     USE INDEX (p_descricao_idx)
         INNER JOIN Item i ON i.id_produto = p.id
-    
     WHERE p.tem_materia_prima = true
             AND p.descricao LIKE "Pastel%"
     GROUP BY p.id
