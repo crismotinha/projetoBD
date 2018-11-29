@@ -5,14 +5,14 @@
     FROM Filial f 
         INNER JOIN Funcionario fu ON fu.filial = f.id
         INNER JOIN Venda v ON v.id_func = fu.id
-    GROUP BY f.nome; 
+    GROUP BY f.id; 
 
 -- 2. Filial que vendeu mais (ordenando por qtd de venda)
     SELECT f.nome AS NOME_FILIAL, count(v.id) AS NUM_VENDAS_MAX
     FROM Filial f 
         INNER JOIN Funcionario fu ON fu.filial = f.id
         INNER JOIN Venda v ON v.id_func = fu.id
-    GROUP BY f.nome
+    GROUP BY f.id
     ORDER BY NUM_VENDAS_MAX DESC LIMIT 1; 
 
 -- 3. Funcionario que vendeu mais
@@ -48,7 +48,7 @@
     FROM Venda v 
         INNER JOIN Carrinho ca ON ca.id = v.id_carrinho
         INNER JOIN Cliente c ON c.id = ca.id_cliente
-    GROUP BY c.nome
+    GROUP BY c.id
     ORDER BY NUM_COMPRAS DESC LIMIT 1; 
 
 -- 9. Qual cliente comprou menos
@@ -56,7 +56,7 @@
     FROM Venda v 
         INNER JOIN Carrinho ca ON ca.id = v.id_carrinho
         INNER JOIN Cliente c ON c.id = ca.id_cliente
-    GROUP BY c.nome
+    GROUP BY c.id
     ORDER BY NUM_COMPRAS ASC LIMIT 1; 
 
 -- 10. Produtos mais pedidos (sem receita) (refrigerante, cerveja)
@@ -64,7 +64,7 @@
     FROM Produto p
         INNER JOIN Item i ON i.id_produto = p.id
     WHERE p.tem_materia_prima = false
-    GROUP BY p.descricao
+    GROUP BY p.id
     ORDER BY NUM_PEDIDOS DESC LIMIT 5; -- pega os top 5
     
 
@@ -73,7 +73,7 @@
     FROM Produto p
         INNER JOIN Item i ON i.id_produto = p.id
     WHERE p.tem_materia_prima = true
-    GROUP BY p.descricao
+    GROUP BY p.id
     ORDER BY NUM_PEDIDOS DESC LIMIT 5; -- pega os top 5
 
 -- 12. Matéria prima que gasta mais por semana
@@ -83,7 +83,7 @@
     FROM Funcionario func
         INNER JOIN Entrega e ON e.id_func = func.id
     WHERE func.tipo = 2
-    GROUP BY func.nome;
+    GROUP BY func.id;
  
 -- 14. Produto mais vendido no dia
     SELECT p.descricao AS PRODUTO_MAIS_VENDIDO_HJ, count(i.id) AS NUM_PEDIDOS
@@ -93,7 +93,7 @@
         INNER JOIN Carrinho ca ON ca.id = ic.id_carrinho
         INNER JOIN Venda v ON v.id_carrinho = ca.id
     WHERE v.data_venda = curdate()
-    GROUP BY p.descricao
+    GROUP BY p.id
     ORDER BY NUM_PEDIDOS DESC LIMIT 1;
 
 -- 15. Vendas mais caras do ultimo mes
@@ -103,7 +103,7 @@
     FROM Produto p
 		INNER JOIN Receita r ON r.id_produto = p.id
 	WHERE p.tem_materia_prima = true
-    GROUP BY p.descricao
+    GROUP BY p.id
 
 -- 17. Media de entregas por filial por mês
 
