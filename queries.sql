@@ -76,16 +76,14 @@
     GROUP BY p.id
     ORDER BY NUM_PEDIDOS DESC LIMIT 5; -- pega os top 5
 
--- 12. Matéria prima que gasta mais por semana
-
--- 13. Numero de entregas por funcionario entregador
+-- 12. Numero de entregas por funcionario entregador
     SELECT func.nome AS NOME_FUNCIONARIO, count(e.id) AS NUM_ENTREGAS
     FROM Funcionario func
         INNER JOIN Entrega e ON e.id_func = func.id
     WHERE func.tipo = 2
     GROUP BY func.id;
  
--- 14. Produto mais vendido no dia
+-- 13. Produto mais vendido no dia
     SELECT p.descricao AS PRODUTO_MAIS_VENDIDO_HJ, count(i.id) AS NUM_PEDIDOS
     FROM Produto p
         INNER JOIN Item i ON i.id_produto = p.id
@@ -96,32 +94,32 @@
     GROUP BY p.id
     ORDER BY NUM_PEDIDOS DESC LIMIT 1;
 
--- 15. Vendas mais caras do ultimo mes
+-- 14. Vendas mais caras do ultimo mes
     SELECT id, id_carrinho, valor_total
     FROM Venda v
     WHERE data_venda > DATE_SUB(NOW(), INTERVAL 1 MONTH)
     ORDER BY valor_total DESC LIMIT 5;
 
--- 16. Peso total de cada produto com receita (soma das qtd que são em gramas)
+-- 15. Peso total de cada produto com receita (soma das qtd que são em gramas)
     SELECT p.descricao AS NOME_PRODUTO, sum(r.qtd) AS PESO_TOTAL 
     FROM Produto p
 		INNER JOIN Receita r ON r.id_produto = p.id
 	WHERE p.tem_materia_prima = true
     GROUP BY p.id;
 
--- 17. Media de entregas por filial por mês
-    
-
--- 18. Sabor de pastel mais vendido
+-- 16. Sabor de pastel mais vendido
     SELECT p.descricao AS NOME_PRODUTO, count(i.id) AS NUM_PEDIDOS
     FROM Produto p
+    USE INDEX (p_descricao_idx)
         INNER JOIN Item i ON i.id_produto = p.id
+    
     WHERE p.tem_materia_prima = true
             AND p.descricao LIKE "Pastel%"
-    GROUP BY p.descricao
+    GROUP BY p.id
     ORDER BY NUM_PEDIDOS DESC LIMIT 1;
+    
 
--- 19. Sabor de pastel mais vendido por loja
+-- 17. Sabor de pastel mais vendido por loja
     SELECT p.descricao AS NOME_PRODUTO, count(i.id) AS NUM_PEDIDOS, fi.nome AS NOME_FILIAL
     FROM Produto p
         INNER JOIN Item i ON i.id_produto = p.id
@@ -135,7 +133,7 @@
     GROUP BY p.descricao, fi.nome
     ORDER BY NUM_PEDIDOS DESC;
 
--- 20. Fornecedor mais pedido de produto
+-- 18. Fornecedor mais pedido de produto
     SELECT fp.nome AS NOME_FORNECEDOR, p.descricao AS PRODUTO, count(pp.id) AS QTD_PEDIDOS
     FROM PedidosProduto pp
         INNER JOIN FornecedorProduto fp ON fp.id = pp.id_fornecedor
@@ -144,7 +142,7 @@
     ORDER BY count(fp.id) DESC LIMIT 1;
 
     
--- 21. Fornecedor mais pedido de materia prima
+-- 19. Fornecedor mais pedido de materia prima
     SELECT fmp.nome AS NOME_FORNECEDOR, mp.nome AS PRODUTO, count(pmp.id) AS QTD_PEDIDOS
     FROM PedidosMateriaPrima pmp
         INNER JOIN FornecedorMateriaPrima fmp ON fmp.id = pmp.id_fornecedor
@@ -152,7 +150,7 @@
     GROUP BY fmp.id, mp.nome
     ORDER BY count(fmp.id) DESC LIMIT 1;
     
--- 22. Fornecedor mais pedido de tudo 
+-- 20. Fornecedor mais pedido de tudo 
     
     (SELECT fp.nome AS NOME_FORNECEDOR
     FROM PedidosProduto pp
