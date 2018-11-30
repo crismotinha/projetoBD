@@ -54,3 +54,34 @@ CREATE TRIGGER after_ReposicaoProduto_insert AFTER INSERT
 --  INSERT INTO ReposicaoProduto (qtd_rep, id_produto, data_rep) values
 --  ("50", 6, CURDATE());
 --  select * from EstoqueProduto where id_produto=6;
+
+-- Fazer pedido de produto caso chegue no estoque mínimo
+delimiter // 
+CREATE TRIGGER after_EstoqueMateriaPrima_update AFTER UPDATE
+ ON EstoqueMateriaPrima
+ FOR EACH ROW
+ BEGIN
+    IF NEW.qtd_gramas < NEW.estoque_min THEN
+        IF ((SELECT data_ped 
+            FROM PedidosMateriaPrima
+            WHERE id_materia_prima = NEW.id_materia_prima) <> curdate()) OR
+            ((SELECT data_ped 
+            FROM PedidosMateriaPrima
+            WHERE id_materia_prima = NEW.id_materia_prima) is null) THEN
+            
+            INSERT INTO PedidosMateriaPrima (id_materia_prima, qtd_gramas_pedido, data_ped, id_fornecedor) values
+            (NEW.id_materia_prima, NEW.estoque_min + 5000, curdate(), 
+                (SELECT id FROM FornecedorMateriaPrima WHERE id_materia_prima = NEW.id_materia_prima));
+        END IF;
+    END IF;
+ END//
+ 
+ delimiter ;
+ 
+-- Para testar:
+-- select * from EstoqueMateriaPrima
+-- select * from PedidosMateriaPrima
+-- 
+-- update EstoqueMateriaPrima 
+-- set qtd_gramas = 400
+-- where id=1;
