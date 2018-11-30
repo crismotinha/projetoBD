@@ -118,3 +118,21 @@ CALL AdicionaNoCarrinho(2,2, @Carrinho);
 
 CALL FinalizaVenda(@Carrinho, 1, null, 1, @ContaFinal);
 SELECT @ContaFinal
+
+
+-- Procedure de relatorio de vendas semanal
+
+DELIMITER //
+CREATE PROCEDURE RelatorioVendasSemanal()
+BEGIN
+  SELECT p.id AS ID_PRODUTO, p.descricao AS PRODUTO, sum(v.valor_total) AS VALOR_VENDAS
+  FROM Produto p
+    INNER JOIN Item i ON i.id_produto = p.id
+    INNER JOIN ItemCarrinho ic ON i.id = ic.id_item
+    INNER JOIN Carrinho c ON c.id = ic.id_carrinho
+    INNER JOIN Venda v on v.id_carrinho = c.id
+  WHERE v.data_venda >= DATE_SUB(CURDATE(), INTERVAL 1 WEEK)
+  GROUP BY p.id;
+END //
+DELIMITER ;
+
